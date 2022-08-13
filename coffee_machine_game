@@ -1,0 +1,59 @@
+from Data_base import coffe_machine_DataBase
+import os
+from python_logo import coffee_machine_ascii
+clear = lambda : os.system('clear')
+#TODO -1 a fction that help you to print all of the report and resources
+def what_i_will_put(ingredient , resources):
+        for item in ingredient:
+              if ingredient[item] > resources[item]:
+                return False
+        return True
+def coins():
+    x = int(input("how much quarters?")) * 0.25
+    y = int(input("how much dimes?")) * 0.10
+    z = int(input("how much nickels?")) * 0.05
+    w = int(input("how much pennies?")) * 0.01
+    total = x + y + z + w
+    return total
+def generate_coins(my_pay,cost):
+    if my_pay >= cost:
+        print("there's you exchange: ")
+        global profit
+        profit = round(my_pay - cost,2)
+        return profit
+    else:
+        print("sorry we can't procceed in this ")
+def make_coffee( order_ingredients):
+    """Deduct the required ingredients from the resources."""
+    resources = coffe_machine_DataBase.resources
+    for item in order_ingredients:
+        resources[item] -= order_ingredients[item]
+def game():
+
+    resources = coffe_machine_DataBase.resources
+    menu =  coffe_machine_DataBase.menu
+    should_continue =  True
+
+    while should_continue:
+      clear()
+      print(coffee_machine_ascii.logo)
+      ask = input("what would you like?: (latte/cappuccino/espresso/report): ")
+      if ask == 'report':
+        print(f"water:{resources['water']}\ncoffee:{resources['coffee']}\nmilk:{resources['milk']}\n")
+      elif ask == "off":
+        should_continue = False
+      else:
+          drink = menu[ask]
+          # drink_all =  drink["ingredients"]
+          if what_i_will_put(drink["ingredients"],resources):
+              q = coins()
+              if generate_coins(q,drink["cost"]):
+                  print(profit)
+                  if make_coffee(drink["ingredients"]):
+                       print(f"here's you {ask} enjoy it")
+
+              else:
+                      print("not enough")
+          else:
+              print("not enough babe")
+game()
